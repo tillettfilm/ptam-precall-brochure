@@ -1472,6 +1472,7 @@
 
   function goTo(i) {
     if (i < 0 || i >= total || i === current) return;
+    scenes[current].querySelectorAll('video').forEach(v => v.pause());
     scenes[current].classList.remove('active');
     scenes[i].classList.add('active');
     scenes[i].scrollTop = 0;
