@@ -528,8 +528,17 @@
   }
   .brand-strip .label-caps { text-align: center; margin-bottom: 10px; }
   .brand-logos {
-    display: flex; justify-content: center; flex-wrap: wrap;
-    gap: 28px; align-items: center;
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    justify-content: center;
+    gap: 28px;
+    align-items: center;
+  }
+  @media (max-width: 700px) {
+    .brand-logos {
+      grid-template-columns: repeat(3, auto);
+      justify-items: center;
+    }
   }
   .brand-logos div {
     font-size: 13px;
@@ -1064,7 +1073,7 @@
              Local:    <video src="assets/intro.mp4" controls></video>  -->
         <video src="assets/intro.mp4" controls playsinline preload="metadata" id="introVideo" onloadedmetadata="this.currentTime=0.001" style="width:100%; aspect-ratio:16/9; background:#000; border-radius:12px; display:block;">Your browser does not support embedded video.</video>
       </div>
-      <p class="video-tag"><strong>What's in it:</strong> a hello, a few specific things, and why I think Farnborough is a stronger opportunity than it might first appear.</p>
+      <p class="video-tag"><strong>What's in it:</strong> a hello, a few specific things and why I think Farnborough is a stronger opportunity than it might first appear.</p>
     </div>
   </section>
 
@@ -1148,11 +1157,11 @@
        Update the RESEARCH NOTE below with 2-3 specific things you noticed about this client
        (their website, a recent post, a campaign, etc.).
        Optionally tailor 1-2 of the questions with their name or business specifics. -->
-  <section class="scene" data-scene="questions" data-title="Six Questions for PTAM">
+  <section class="scene" data-scene="questions" data-title="7 Questions for PTAM">
     <div class="scene-inner narrow">
       <div class="scene-header">
-        <div class="label-caps">Scene 04 · Seven Questions, Written for PTAM</div>
-        <h2 class="heading-large">Seven questions, written for you after spending time with your work.</h2>
+        <div class="label-caps">Scene 04 · 7 Questions for PTAM</div>
+        <h2 class="heading-large">7 questions for PTAM.</h2>
 
         <div class="questions-research-note">
           <p style="margin-bottom:14px;">As mentioned in my video, I'm genuinely excited about your project and the opportunity to learn more about what you're looking to achieve.</p>
@@ -1233,7 +1242,7 @@
         <div class="question-block">
           <button type="button" class="question-toggle" data-q="6">
             <span class="question-num">No. 07</span>
-            <span class="question-text">What level of investment has been allocated to the Farnborough film, and how important is it that the final piece continues working commercially after the event?</span>
+            <span class="question-text">How long do you expect this content to resonate with your audience? Is it 3 months, 12 months, 2 years or longer?</span>
             <span class="question-icon"></span>
           </button>
           <div class="question-expand">
@@ -1262,7 +1271,7 @@
       <div class="scene-header">
         <div class="label-caps">Scene 05 · In Their Words</div>
         <h2 class="heading-large">What the work is designed to do.</h2>
-        <p class="body-large" style="margin-top:18px;">The aim is not to simply document a moment. It is to create a film that continues working after the event - giving the right people a clearer sense of who PTAM are, what they do, and why they are trusted in demanding industries.</p>
+        <p class="body-large" style="margin-top:18px;">The aim is not to simply document a moment, but to create a film that continues working after the event - giving the right people a clearer sense of who PTAM are, what they do and why they are trusted in demanding industries.</p>
       </div>
 
       <div class="testimonial-grid">
@@ -1295,6 +1304,13 @@
             <img src="assets/testimonial-thumbnail.jpg" alt="">
             <div class="play-overlay"></div>
           </div>
+          <div class="testimonial-author" style="margin-top:14px; padding:0 4px;">
+            <div class="author-avatar">PT</div>
+            <div>
+              <div class="author-name">Pete Taylor</div>
+              <div class="author-role">Founder · Heroic Man</div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -1308,7 +1324,7 @@
   <section class="scene closing" data-scene="closing" data-title="Final Frame">
     <div class="scene-inner">
       <div class="label-caps" style="margin-bottom:22px;">Scene 06 · Final Frame</div>
-      <p class="closing-quote">PTAM, thank you for the time you've already given this. Looking forward to Tuesday, and to seeing what we might make together.</p>
+      <p class="closing-quote">PTAM, thank you for the time you've already given this. Looking forward to Tuesday and to seeing what we might make together.</p>
 
       <div class="signature-block">
         <div class="signature-photo">CT</div>
@@ -1622,7 +1638,7 @@
     'Q4 - What are the key scenes to capture at the stand?',
     'Q5 - Are there any restrictions around filming?',
     'Q6 - After the airshow, where does this film need to live?',
-    'Q7 - What level of investment has been allocated, and how important is long-term commercial use?'
+    'Q7 - How long do you expect this content to resonate with your audience? Is it 3 months, 12 months, 2 years or longer?'
   ];
 
   // Store question answers when Scene 04 form is submitted
