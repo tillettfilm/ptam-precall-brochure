@@ -337,7 +337,7 @@
   /* Slate metadata block */
   .slate {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 0;
     border-top: 1px solid var(--line-strong);
     border-bottom: 1px solid var(--line-strong);
@@ -821,11 +821,13 @@
     z-index: 1000;
     display: none;
     opacity: 0;
-    transition: opacity 0.7s ease;
+    transition: opacity 0.35s ease;
     overflow: hidden;
   }
   .closing-reel.visible {
     display: block;
+  }
+  .closing-reel.fade-in {
     opacity: 1;
   }
 
@@ -888,7 +890,7 @@
     z-index: 2;
     opacity: 0;
     transform: translateY(8px);
-    transition: opacity 1.4s ease 0.4s, transform 1.4s ease 0.4s;
+    transition: opacity 0.5s ease 0.15s, transform 0.5s ease 0.15s;
     text-align: center;
     padding: 30px;
   }
@@ -1060,9 +1062,9 @@
              Vimeo:    <iframe src="https://player.vimeo.com/video/XXXXXX" allow="autoplay; fullscreen"></iframe>
              YouTube:  <iframe src="https://www.youtube.com/embed/XXXXXX" allow="autoplay; fullscreen"></iframe>
              Local:    <video src="assets/intro.mp4" controls></video>  -->
-        <video src="assets/intro.mp4" controls playsinline preload="metadata" id="introVideo" style="width:100%; aspect-ratio:16/9; background:#000; border-radius:12px; display:block;">Your browser does not support embedded video.</video>
+        <video src="assets/intro.mp4" controls playsinline preload="metadata" id="introVideo" onloadedmetadata="this.currentTime=0.001" style="width:100%; aspect-ratio:16/9; background:#000; border-radius:12px; display:block;">Your browser does not support embedded video.</video>
       </div>
-      <p class="video-tag"><strong>What's in it:</strong> a hello, a few specific things I noticed from your work at PTAM, and why I think Farnborough is a stronger opportunity than it might first appear.</p>
+      <p class="video-tag"><strong>What's in it:</strong> a hello, a few specific things, and why I think Farnborough is a stronger opportunity than it might first appear.</p>
     </div>
   </section>
 
@@ -1159,12 +1161,12 @@
         </div>
       </div>
 
-      <form id="questionsForm" onsubmit="event.preventDefault(); document.getElementById('formThanks').style.display='block'; this.style.display='none';">
+      <form id="questionsForm" onsubmit="event.preventDefault(); (function(f){ const labels=['PTAM, what is the single most important commercial outcome this Farnborough film needs to support?','Who are we speaking to?','What needs to be unmistakable by the end of the film?','What are the key scenes to capture at the stand?','Are there any restrictions around filming?','After the airshow, where does this film need to live?','What level of investment has been allocated, and how important is long-term commercial use?']; const answers=Array.from(f.querySelectorAll('.question-input')).map((t,i)=>'Q'+(i+1)+'. '+labels[i]+'\n'+(t.value.trim()||'(no answer)')).join('\n\n'); const mailto='mailto:charlie@tillettfilm.com?subject='+encodeURIComponent('PTAM - Pre-call questions')+'&body='+encodeURIComponent(answers); window.location.href=mailto; document.getElementById('formThanks').style.display='block'; f.style.display='none'; })(this);">
 
         <div class="question-block">
           <button type="button" class="question-toggle" data-q="0">
             <span class="question-num">No. 01</span>
-            <span class="question-text">What is the single most important commercial outcome this Farnborough film needs to support?</span>
+            <span class="question-text">PTAM, what is the single most important commercial outcome this Farnborough film needs to support?</span>
             <span class="question-icon"></span>
           </button>
           <div class="question-expand">
@@ -1175,7 +1177,7 @@
         <div class="question-block">
           <button type="button" class="question-toggle" data-q="1">
             <span class="question-num">No. 02</span>
-            <span class="question-text">Who are we really speaking to - aerospace buyers, defence contacts, existing customers, potential partners, future hires, or all of the above?</span>
+            <span class="question-text">Who are we speaking to - aerospace buyers, defence contacts, existing customers, potential partners, future hires, or all of the above?</span>
             <span class="question-icon"></span>
           </button>
           <div class="question-expand">
@@ -1186,7 +1188,7 @@
         <div class="question-block">
           <button type="button" class="question-toggle" data-q="2">
             <span class="question-num">No. 03</span>
-            <span class="question-text">What needs to be unmistakable by the end of the film - scale, precision, capability, trust, speed, British engineering, or something else?</span>
+            <span class="question-text">What needs to be unmistakable by the end of the film - scale, precision, capability, trust, speed, or something else?</span>
             <span class="question-icon"></span>
           </button>
           <div class="question-expand">
@@ -1224,6 +1226,17 @@
           </button>
           <div class="question-expand">
             <textarea class="question-input" placeholder="Honesty welcome. Big swings welcome too…"></textarea>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <button type="button" class="question-toggle" data-q="6">
+            <span class="question-num">No. 07</span>
+            <span class="question-text">What level of investment has been allocated to the Farnborough film, and how important is it that the final piece continues working commercially after the event?</span>
+            <span class="question-icon"></span>
+          </button>
+          <div class="question-expand">
+            <textarea class="question-input" placeholder="A ballpark figure and a sense of how hard this film needs to work long-term…"></textarea>
           </div>
         </div>
 
@@ -1562,6 +1575,9 @@
     }
 
     closingReel.classList.add('visible');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      closingReel.classList.add('fade-in');
+    }));
 
     if (useVideo) {
       // Try to play with sound first (the user just clicked Send, so audio should be allowed)
@@ -1588,7 +1604,7 @@
   }
 
   closingReelClose?.addEventListener('click', () => {
-    closingReel.classList.remove('visible', 'show-text', 'no-video');
+    closingReel.classList.remove('visible', 'fade-in', 'show-text', 'no-video');
     if (closingReelVideo) {
       closingReelVideo.pause();
       closingReelVideo.currentTime = 0;
