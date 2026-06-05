@@ -694,6 +694,8 @@
 
   .video-testimonial {
     grid-column: span 2;
+  }
+  .video-testimonial-frame {
     overflow: hidden;
     aspect-ratio: 24 / 7;
     position: relative;
@@ -703,7 +705,8 @@
     position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
   }
   @media (max-width: 800px) {
-    .video-testimonial { grid-column: span 1; aspect-ratio: 16 / 9; }
+    .video-testimonial { grid-column: span 1; }
+    .video-testimonial-frame { aspect-ratio: 16 / 9; }
   }
 
   /* ===== Closing ===== */
@@ -1300,9 +1303,11 @@
 
         <!-- VIDEO TESTIMONIAL -->
         <div class="video-testimonial">
-          <div class="poster-thumb" data-src="assets/testimonial.mp4">
-            <img src="assets/testimonial-thumbnail.jpg" alt="">
-            <div class="play-overlay"></div>
+          <div class="video-testimonial-frame">
+            <div class="poster-thumb" data-src="assets/testimonial.mp4">
+              <img src="assets/testimonial-thumbnail.jpg" alt="">
+              <div class="play-overlay"></div>
+            </div>
           </div>
           <div class="testimonial-author" style="margin-top:14px;">
             <div class="author-avatar">PT</div>
