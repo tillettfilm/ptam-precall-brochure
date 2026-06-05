@@ -1161,7 +1161,7 @@
         </div>
       </div>
 
-      <form id="questionsForm" onsubmit="event.preventDefault(); (function(f){ const labels=['PTAM, what is the single most important commercial outcome this Farnborough film needs to support?','Who are we speaking to?','What needs to be unmistakable by the end of the film?','What are the key scenes to capture at the stand?','Are there any restrictions around filming?','After the airshow, where does this film need to live?','What level of investment has been allocated, and how important is long-term commercial use?']; const answers=Array.from(f.querySelectorAll('.question-input')).map((t,i)=>'Q'+(i+1)+'. '+labels[i]+'\n'+(t.value.trim()||'(no answer)')).join('\n\n'); const mailto='mailto:charlie@tillettfilm.com?subject='+encodeURIComponent('PTAM - Pre-call questions')+'&body='+encodeURIComponent(answers); window.location.href=mailto; document.getElementById('formThanks').style.display='block'; f.style.display='none'; })(this);">
+      <form id="questionsForm" onsubmit="event.preventDefault()">
 
         <div class="question-block">
           <button type="button" class="question-toggle" data-q="0">
@@ -1611,42 +1611,64 @@
     }
   });
 
-  // Notes form (final scene) — sends email and triggers closing showreel
+  // ===== Formspree submission =====
+  const FORMSPREE = 'https://formspree.io/f/xrevbrvr';
+
+  const questionLabels = [
+    'Q1 - PTAM, what is the single most important commercial outcome this Farnborough film needs to support?',
+    'Q2 - Who are we speaking to?',
+    'Q3 - What needs to be unmistakable by the end of the film?',
+    'Q4 - What are the key scenes to capture at the stand?',
+    'Q5 - Are there any restrictions around filming?',
+    'Q6 - After the airshow, where does this film need to live?',
+    'Q7 - What level of investment has been allocated, and how important is long-term commercial use?'
+  ];
+
+  // Store question answers when Scene 04 form is submitted
+  const questionsForm = document.getElementById('questionsForm');
+  questionsForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const inputs = Array.from(questionsForm.querySelectorAll('.question-input'));
+    const answers = {};
+    inputs.forEach((t, i) => {
+      answers[questionLabels[i]] = t.value.trim() || '(no answer)';
+    });
+    sessionStorage.setItem('ptam_answers', JSON.stringify(answers));
+    document.getElementById('formThanks').style.display = 'block';
+    questionsForm.style.display = 'none';
+  });
+
+  // Notes form + end buttons
   const notesForm = document.getElementById('notesForm');
   const notesInput = document.getElementById('notesInput');
   const allSetBtn = document.getElementById('allSetBtn');
 
-  function endBrochure(opts = { sendEmail: false }) {
-    // Play closing reel immediately so the client gets the impact
+  function endBrochure() {
     playClosingReel();
 
-    // If asked to send an email and there's content, fire it off a beat later
-    if (opts.sendEmail) {
-      const note = (notesInput?.value || '').trim();
-      if (note) {
-        setTimeout(() => {
-          // CHARLIE: change the email address below if needed.
-          const subject = 'A note before our call';
-          const mailto = `mailto:charlie@tillettfilm.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(note)}`;
-          window.location.href = mailto;
-        }, 200);
-      }
-    }
+    // Compile everything — questions + final note
+    const savedAnswers = JSON.parse(sessionStorage.getItem('ptam_answers') || '{}');
+    const note = (notesInput?.value || '').trim();
+    const payload = {
+      _subject: 'PTAM - Pre-call brochure completed',
+      'Final note': note || '(none left)',
+      ...savedAnswers
+    };
+
+    fetch(FORMSPREE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => { /* silent fail — reel already playing */ });
   }
 
   notesForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    const note = (notesInput.value || '').trim();
-    if (!note) {
-      // No content — treat as "all set" (skip email, just play reel)
-      endBrochure({ sendEmail: false });
-      return;
-    }
-    endBrochure({ sendEmail: true });
+    endBrochure();
   });
 
   allSetBtn?.addEventListener('click', () => {
-    endBrochure({ sendEmail: false });
+    endBrochure();
   });
 </script>
 
