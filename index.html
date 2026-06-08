@@ -1645,7 +1645,15 @@
     'Q7 - How long do you expect this content to resonate with your audience? Is it 3 months, 12 months, 2 years or longer?'
   ];
 
-  // Store question answers when Scene 04 form is submitted
+  function submitToFormspree(payload) {
+    return fetch(FORMSPREE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  }
+
+  // Submit question answers to Formspree immediately when Scene 04 form is sent
   const questionsForm = document.getElementById('questionsForm');
   questionsForm?.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -1655,6 +1663,10 @@
       answers[questionLabels[i]] = t.value.trim() || '(no answer)';
     });
     sessionStorage.setItem('ptam_answers', JSON.stringify(answers));
+    submitToFormspree({
+      _subject: 'PTAM - Pre-call questions submitted',
+      ...answers
+    });
     document.getElementById('formThanks').style.display = 'block';
     questionsForm.style.display = 'none';
   });
@@ -1676,11 +1688,7 @@
       ...savedAnswers
     };
 
-    fetch(FORMSPREE, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload)
-    }).catch(() => { /* silent fail — reel already playing */ });
+    submitToFormspree(payload).catch(() => { /* silent fail — reel already playing */ });
   }
 
   notesForm?.addEventListener('submit', (e) => {
